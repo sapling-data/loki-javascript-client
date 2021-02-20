@@ -11,8 +11,5 @@
   "bugs": {
     "url": "https://github.com/sapling-data/loki-dev-client/issues"
   },
-  "homepage": "https://github.com/sapling-data/loki-dev-client#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/sapling-data"
-  }
+  "homepage": "https://github.com/sapling-data/loki-dev-client#readme"
 }
