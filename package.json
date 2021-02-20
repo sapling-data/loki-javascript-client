@@ -1,0 +1,18 @@
+{
+  "name": "@sapling-data/loki-dev-client",
+  "version": "0.1.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sapling-data/loki-dev-client.git"
+  },
+  "author": "Sapling Data, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sapling-data/loki-dev-client/issues"
+  },
+  "homepage": "https://github.com/sapling-data/loki-dev-client#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/yourOrganizationOrAccount"
+  },
+}
