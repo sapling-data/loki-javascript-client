@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-underscore-dangle */
 const data = {
   loadEntity(urn, viewUrn, options) {
     options = options || {};
@@ -41,19 +40,24 @@ const data = {
     promise = loki.data._handleJsonp(promise, options);
     return promise;
   },
-  _handleJsonpErrHandler(xhr, statusCode, statusText) {
-    try {
-      const json = xhr.responseText.replace(/jQuery[0-9_]+\(/g, '').replace(/\)/g, '').replace('{"results":[', '');
-      xhr.responseJSON = JSON.parse(json);
-    } catch (error) {
-      console.error(error);
-    }
-    return xhr;
-  },
   saveEntity() {
     console.log('saveEntity');
   },
 };
+
+// Functions that were previously designated as outside the public API via a dangling underscore,
+// i.e., _functionName, should be abstracted into simple functions that are not part of the
+// exported object. See below for the refactored declaration of loki.data._handleJsonpErrHandler.
+
+function handleJsonpErrHandler(xhr, statusCode, statusText) {
+  try {
+    const json = xhr.responseText.replace(/jQuery[0-9_]+\(/g, '').replace(/\)/g, '').replace('{"results":[', '');
+    xhr.responseJSON = JSON.parse(json);
+  } catch (error) {
+    console.error(error);
+  }
+  return xhr;
+}
 
 // eslint-disable-next-line import/prefer-default-export
 export { data };
