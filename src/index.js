@@ -1,3 +1,4 @@
 import { data } from './data';
 
-export { data }
+// eslint-disable-next-line import/prefer-default-export
+export default { data };
