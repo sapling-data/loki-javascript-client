@@ -1,4 +1,4 @@
-import { data } from './data';
+import { dataApi } from './data';
 
 // eslint-disable-next-line import/prefer-default-export
-export default { data };
+export default { dataApi };
