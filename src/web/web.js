@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable class-methods-use-this */
 /**
  * Web module
  * @module Loki/Web
@@ -60,7 +62,7 @@ export default class Web {
     return null;
   }
 
-  /** 
+  /**
    * Constructs a url for the resource.
    * This url will point to a web service that returns the resource's data (GET)
    * or allows the resource to be modified (POST,DELETE).
@@ -103,7 +105,7 @@ export default class Web {
     return this.serviceUrl(options);
   }
 
-  /** 
+  /**
    * Constructs a url for the resource and appends a release parameter that
    * allows for recaching when a major release is pushed.
    * This url will point to a web service that returns the resource's data (GET)
@@ -152,7 +154,7 @@ export default class Web {
     return url;
   }
 
-  /** 
+  /**
    * Constructs a url for the page with the given parameters
    * @function
    * @param {type} pageUrn the urn of the page
@@ -183,7 +185,7 @@ export default class Web {
     return this.serviceUrl(options);
   }
 
-  /**  
+  /**
    * Constructs a url for the page with the given parameters and appends
    * a release parameter that allows for recaching when a major release is pushed.
    * @function
@@ -213,7 +215,7 @@ export default class Web {
     return this.pageUrl(pageUrn, options);
   }
 
-  /** 
+  /**
    * Constructs a url for a resource in the model dataspace
    * This url will point to a web service that returns the resource's data (GET)
    * or allows the resource to be modified (POST,DELETE).
@@ -273,7 +275,7 @@ export default class Web {
   /**
    * @todo add description
    * @function
-   * @param {string} sourceUrn 
+   * @param {string} sourceUrn
    * @param {string} destUrn
    * @param {string} viewUrn
    * @param {Object} options of form {merge:"true",genUrnFromField:"no"}
@@ -295,7 +297,7 @@ export default class Web {
     return url;
   }
 
-  /** 
+  /**
    * Returns a url for a loki data web service (CRUD service)
    * @function
    * @param {string} entityUrn the urn of the entity to create/read/update/delete
@@ -350,7 +352,7 @@ export default class Web {
     return this.serviceUrl(options);
   }
 
-  /** 
+  /**
    * Returns a url for a loki service (web service, page, or data service)
    * @function
    * @param {object} options the options for construction the  service url
@@ -385,6 +387,8 @@ export default class Web {
         }
       }
     } else if (options.serviceGroupUrn) {
+      // TODO: fix environ
+      // eslint-disable-next-line no-undef
       conn = environ.getConnection(options.serviceGroupUrn);
       if (conn) {
         newPrefix = conn.url;

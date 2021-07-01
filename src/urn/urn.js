@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /**
  * Urn module
  * @module Loki/Urn
@@ -7,7 +8,7 @@
  * @class Represents the Urn API
  */
 export default class Urn {
-  /** 
+  /**
    * Returns Checks if the urn is a urn with a new marker '$' in it.
    * @function
    * @param {string} urn
@@ -16,8 +17,8 @@ export default class Urn {
   isNew(urn) {
     return (urn.indexOf('$') >= 0);
   }
-  
-  /** 
+
+  /**
    * Checks if the urn is a resource urn (with the resource marker '!' in it)
    * @function
    * @param {string} urn
@@ -27,7 +28,7 @@ export default class Urn {
     return (urn.indexOf('!') >= 0);
   }
 
-  /** 
+  /**
    * Checks if the urn contains a version component
    * @function
    * @param {string} urn
@@ -37,7 +38,7 @@ export default class Urn {
     return (urn.indexOf('~') >= 0);
   }
 
-  /** 
+  /**
    * Returns the version component of the urn if there is one
    * @function
    * @param {string} urn
@@ -51,7 +52,7 @@ export default class Urn {
     return null;
   }
 
-  /** 
+  /**
    * Returns the last segment of the given urn
    * @function
    * @param {string} urn

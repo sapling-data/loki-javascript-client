@@ -9,14 +9,14 @@ export default [
       file: 'dist/es-bundle.js',
       format: 'es',
       sourcemap: true,
-      name: 'Loki'
+      name: 'Loki',
     },
     plugins: [
       nodeResolve({ preferBuiltins: true, browser: true }),
       commonJs({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
       }),
-      json()
+      json(),
     ],
   },
   {
@@ -25,14 +25,14 @@ export default [
       file: 'dist/umd-bundle.js',
       format: 'umd',
       sourcemap: true,
-      name: 'Loki'
+      name: 'Loki',
     },
     plugins: [
       nodeResolve({ preferBuiltins: true, browser: false }),
       commonJs({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
       }),
-      json()
-    ]
+      json(),
+    ],
   },
 ];

@@ -3,9 +3,9 @@
  * @module Loki
  */
 
-import Data from './data/index.js';
-import Urn from './urn/index.js';
-import Web from './web/index.js';
+import Data from './data/index';
+import Urn from './urn/index';
+import Web from './web/index';
 
 /**
  * @class Represents the Loki client API

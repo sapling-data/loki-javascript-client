@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-param-reassign */
 /**
  * Data module
  * @module Loki/Data
@@ -39,9 +41,7 @@ export default class Data {
       },
       url,
     })
-      .then((entity) => {
-        return entity.data;
-      });
+      .then((entity) => entity.data);
   }
 
   loadResource(resourceUrn, options) {
@@ -59,7 +59,7 @@ export default class Data {
         'Content-Type': 'text/plain',
       },
       url,
-    })
+    });
   }
 
   saveEntity(entityUrn, viewUrn, entityData, options) {
@@ -107,13 +107,13 @@ export default class Data {
     options = options || {};
     // set query params based on other options, but don't allow caller to set options.queryParams
     options.queryParams = options.format ? `format=${options.format}` : 'format=json';
-    
+
     if (options.recursive && options.recursive === true) {
       options.queryParams += '&recursive=true';
     }
 
-    const url = this.urn.isResourceUrn(itemUrn) ? 
-    this.web.resourceUrl(itemUrn, options) : this.web.dataServiceUrl(itemUrn, 'urn:com:loki:core:model:api:rawData', options);
+    const url = this.urn.isResourceUrn(itemUrn)
+      ? this.web.resourceUrl(itemUrn, options) : this.web.dataServiceUrl(itemUrn, 'urn:com:loki:core:model:api:rawData', options);
 
     return axios({
       baseURL: this.baseUrl,
@@ -160,7 +160,8 @@ export default class Data {
 
   // handleJsonpErrHandler(xhr, statusCode, statusText) {
   //   try {
-  //     const json = xhr.responseText.replace(/jQuery[0-9_]+\(/g, '').replace(/\)/g, '').replace('{"results":[', '');
+  //     const json = xhr.responseText.replace(/jQuery[0-9_]+\(/g, '').replace(/\)/g, '')
+  // .replace('{"results":[', '');
   //     xhr.responseJSON = JSON.parse(json);
   //   } catch (error) {
   //     console.error(error);
@@ -171,6 +172,7 @@ export default class Data {
   addParamValue(name, value, paramParam, prefix) {
     if (Array.isArray(value)) {
       // This value is an array, repeat all values in the url parameter
+      // eslint-disable-next-line no-plusplus
       for (let j = 0; j < value.length; j++) {
         paramParam = `${paramParam}&${prefix}${name}=${encodeURIComponent(value[j])}`;
       }
@@ -183,6 +185,7 @@ export default class Data {
   addParams(params, prefix) {
     let paramParam = '';
     if (Array.isArray(params)) {
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < params.length; i++) {
         paramParam = this.addParamValue(params[i].name, params[i].value, paramParam, prefix);
       }
@@ -199,6 +202,7 @@ export default class Data {
     const vlen = (values && values.length) || 0;
     let i; let
       len;
+    // eslint-disable-next-line no-plusplus
     for (i = 0, len = keys.length; i < len; ++i) {
       if (i in keys) {
         hash[keys[i]] = vlen > i && i in values ? values[i] : true;
@@ -207,9 +211,9 @@ export default class Data {
     return hash;
   }
 
-  /** 
+  /**
    * Gets header info for the entity or resource without retrieving the data
-   * @function 
+   * @function
    * @param {string} entityUrn the urn of the entity or resource
    * @param {string} options.format the format in which to return the data. "json" is the default.
    * @param {string} options.dataSpaceUrn the data space from which to load the data
@@ -225,8 +229,8 @@ export default class Data {
       options.queryParams = `${options.queryParams}&dataSpaceUrn=${options.dataSpaceUrn}`;
     }
 
-    const url = this.urn.isResourceUrn(entityUrn) ? 
-    this.web.resourceUrl(entityUrn, options) : this.web.dataServiceUrl(entityUrn, 'urn:com:loki:core:model:api:rawData', options);
+    const url = this.urn.isResourceUrn(entityUrn)
+      ? this.web.resourceUrl(entityUrn, options) : this.web.dataServiceUrl(entityUrn, 'urn:com:loki:core:model:api:rawData', options);
 
     let jsonpCallback = null;
     let dataType = 'json';
@@ -236,6 +240,7 @@ export default class Data {
       dataType = 'jsonp'; // automatically adds callback param to url
     }
     // TODO: convert to axios
+    // eslint-disable-next-line no-undef
     const promise = $.ajax({
       method: 'HEAD',
       contentType: 'application/json',
@@ -276,7 +281,7 @@ export default class Data {
     }
 
     if (options.outputView) {
-      const outputView = web.urnToUrlParams(options.outputView);
+      const outputView = this.web.urnToUrlParams(options.outputView);
       options.queryParams = `${options.queryParams}&outputView=${outputView}`;
     }
 
@@ -290,7 +295,8 @@ export default class Data {
       dataType = 'jsonp'; // automatically adds callback param to url
     }
 
-    const url = web.webServiceUrl('urn:com:loki:core:model:api:list', options);
+    const url = this.web.webServiceUrl('urn:com:loki:core:model:api:list', options);
+    // eslint-disable-next-line no-undef
     let promise = $.ajax({
       type: 'GET',
       url,
@@ -301,9 +307,9 @@ export default class Data {
     return promise;
   }
 
-  /** 
+  /**
    * Transforms results array/columns array into a mapped object
-   * @function 
+   * @function
    * @param {Object} data The returned data from a Loki API call
    * @param {string} options.format the format in which to return the data. "json" is the default.
    * @param {string} options.dataSpaceUrn the data space from which to load the data
@@ -334,7 +340,7 @@ export default class Data {
     return data;
   }
 
-  /** 
+  /**
    * Executes a named query on the server or a query string
    * @function
    * @param {Object} options options and parameters for executing the query
@@ -342,21 +348,41 @@ export default class Data {
    * @param {string} options.query the query to be executed
    * @param {string} options.format the format of the results. The default is "json"
    * @param {string} options.dataSpaceUrn the data space on which to run the query
-   * @param {string[]|string[][]} options.params the numbered params for the query. Each param may have multiple values.  These params  are substituted into the query in the order given. Examples: ["v1",["v2a","v2b],"v3"]
-   * @param {Object|Object[]} options.namedParams the named params for the query. Each param may have multiple values.  
-   * These params are  substituted into the query by name. Examples: {p1:"v1",p2:["v2a","v2b"]}; [{name:"p1",value:"v1"},{name:"p2",value:["v2a","v2b"]}]
-   * @param {Object|Object[]} options.expressionParams the expression params for the query.  These params can substitute expressions  within the query and are substituted into the query by name. Examples: {p1:"v1",p2:["v2a","v2b"]}; [{name:"p1",value:"v1"},{name:"p2", value:["v2a","v2b"]}]
-   * @param {number} options.begin (or options.beginIdx) used in query result paging, the index of the first entity to be returned from  the query. Ignored if a LokiYQuery is provided
-   * @param {number} options.num (or options.numRequested) used in query result paging, the number of entities to be returned from the  query. Ignored if a LokiYQuery is provided
-   * @param {string} options.outputView request that the first (and only) column returned by the query (which must be a urn) is turned  into an object using the given outputView
-   * @param {string} options.outputViews request that all columns returned by the query (which must all be urns) are turned into objects  using the given outputViews
-   * @param {boolean} options.mapResults if set to true then map the results such that an array of objects is always returned.  Only  works for json data.
+   * @param {string[]|string[][]} options.params the numbered params for the query.
+   * Each param may have multiple values.
+   * These params are substituted into the query in the order given.
+   * Examples: ["v1",["v2a","v2b],"v3"]
+   * @param {Object|Object[]} options.namedParams the named params for the query.
+   * Each param may have multiple values.
+   * These params are  substituted into the query by name.
+   * Examples: {p1:"v1",p2:["v2a","v2b"]}; [{name:"p1",value:"v1"},{name:"p2",value:["v2a","v2b"]}]
+   * @param {Object|Object[]} options.expressionParams the expression params for the query.
+   * These params can substitute expressions within the query and
+   * are substituted into the query by name.
+   * Examples: {p1:"v1",p2:["v2a","v2b"]}; [{name:"p1",value:"v1"},{name:"p2", value:["v2a","v2b"]}]
+   * @param {number} options.begin (or options.beginIdx) used in query result paging,
+   * the index of the first entity to be returned from  the query.
+   * Ignored if a LokiYQuery is provided
+   * @param {number} options.num (or options.numRequested) used in query result paging,
+   * the number of entities to be returned from the query. Ignored if a LokiYQuery is provided
+   * @param {string} options.outputView request that the first (and only) column returned
+   * by the query (which must be a urn) is turned  into an object using the given outputView
+   * @param {string} options.outputViews request that all columns returned by the query
+   * (which must all be urns) are turned into objects  using the given outputViews
+   * @param {boolean} options.mapResults if set to true then map the results such that
+   * an array of objects is always returned.  Only  works for json data.
    * @param {boolean} options.post use POST http method
-   * @param {boolean} options.jsonp if true, use jsonp for cross site calls. Also, options.format must be json. Default is false. (Not  sure this works for POST.)
-   * @param {string} options.serviceGroupUrn use this service group to determine the base of the url when connecting to another  application.
-   * @param {string} options.connection use this connection to determine the base of the url when connecting to another application.
-   * @param {string} options.urlPrefix used to override the beginning of the url so that another application may be called.
-   * @param {boolean} options.useCurrentUserAuth if true, use the current user's authentication to access the remote service. (default  false). NOTE: does not work cross domain.
+   * @param {boolean} options.jsonp if true, use jsonp for cross site calls.
+   * Also, options.format must be json. Default is false. (Not sure this works for POST.)
+   * @param {string} options.serviceGroupUrn use this service group to determine the base of
+   * the url when connecting to another  application.
+   * @param {string} options.connection use this connection to determine the base of
+   * the url when connecting to another application.
+   * @param {string} options.urlPrefix used to override the beginning of
+   * the url so that another application may be called.
+   * @param {boolean} options.useCurrentUserAuth if true, use the current user's
+   * authentication to access the remote service. (default  false).
+   * NOTE: does not work cross domain.
    * @return {Promise}
    */
   query(options) {
@@ -374,6 +400,7 @@ export default class Data {
       post = false;
       // default to GET when there is a queryUrn so that we have a easy to repeat url for the query
     } else {
+      // eslint-disable-next-line no-unused-vars
       post = true;
       // default to POST for an adhoc query
     }
@@ -431,9 +458,11 @@ export default class Data {
     let paramParam = '';
     // Numbered parameters are p1, p2, p3, etc and can be multi valued arrays
     if (options.params) {
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < options.params.length; i++) {
         if (options.params[i].isArray()) {
           // This parameter is an array, repeat its values in the p{x} url parameter
+          // eslint-disable-next-line no-plusplus
           for (let j = 0; j < options.params[i].length; j++) {
             paramParam = `${paramParam}&p${i + 1}=${encodeURIComponent(options.params[i][j])}`;
           }
@@ -469,6 +498,7 @@ export default class Data {
       },
       url,
     })
-      .then((result) => (options.mapResults ? this.mapResultsFilter(result.data, hasOutputView) : result.data));
+      .then((result) => (options.mapResults
+        ? this.mapResultsFilter(result.data, hasOutputView) : result.data));
   }
 }
