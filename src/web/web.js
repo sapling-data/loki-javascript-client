@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-param-reassign */
 /* eslint-disable class-methods-use-this */
 /**
@@ -289,6 +290,7 @@ export default class Web {
     }
 
     if (options) {
+      // eslint-disable-next-line guard-for-in
       for (const option in options) {
         url = `${url}&${option}=${options[option]}`;
       }

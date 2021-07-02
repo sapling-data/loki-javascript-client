@@ -4,6 +4,8 @@
  */
 
 import Data from './data/index';
+import Environ from './environ/index';
+import Model from './model/index';
 import Urn from './urn/index';
 import Web from './web/index';
 
@@ -22,8 +24,11 @@ export default class Loki {
    * @param {string} config.auth.password String containing the password for all Loki API calls
    */
   constructor(config) {
+    const model = new Model();
     this.baseUrl = config.baseUrl;
     this.appName = config.appName;
+    this.environ = new Environ(model);
+    this.model = new Model(this.environ);
     this.web = new Web(this.appName);
     this.urn = new Urn();
     this.data = new Data(config, this.web, this.urn);
