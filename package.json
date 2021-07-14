@@ -9,7 +9,10 @@
     "prepublishOnly": "webpack --mode=production && npm run expose:cmd",
     "build": "rollup main.js --file dist/bundle.js --format umd --name 'Loki'",
     "rollup:dev": "rollup -c -w",
-    "rollup:build": "rollup -c"
+    "rollup:build": "rollup -c",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "repository": {
     "type": "git",
@@ -29,7 +32,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "rollup": "^2.52.3",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "vitepress": "^0.15.6"
   },
   "dependencies": {
     "axios": "^0.21.1"
