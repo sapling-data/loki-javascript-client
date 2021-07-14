@@ -1,0 +1,2 @@
+# What is Loki JavaScript Client?
+Loki JavaScript Client is a library that makes a client-side API for Sapling Data's Loki platform available in a local development environment. This API is syntatically identical to the Loki jQuery library, making it possible to write code that can be run locally, either in the browser or in Node, or in a fully deployed app on the Loki platform. 
