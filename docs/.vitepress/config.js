@@ -4,6 +4,7 @@ const introduction = [
 ]
 
 module.exports = {
+  base: '/loki-dev-client/',
   title: 'Loki JavaScript Client',
   description: 'Testing.',
   themeConfig: {
