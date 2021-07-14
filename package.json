@@ -1,5 +1,5 @@
 {
-  "name": "@sapling-data/loki-dev-client",
+  "name": "@sapling-data/loki-javascript-client",
   "version": "0.1.0",
   "description": "",
   "scripts": {
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sapling-data/loki-dev-client.git"
+    "url": "git+https://github.com/sapling-data/loki-javascript-client.git"
   },
   "author": "Sapling Data, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sapling-data/loki-dev-client/issues"
+    "url": "https://github.com/sapling-data/loki-javascript-client/issues"
   },
-  "homepage": "https://github.com/sapling-data/loki-dev-client#readme",
+  "homepage": "https://github.com/sapling-data/loki-javascript-client#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-json": "^4.1.0",
