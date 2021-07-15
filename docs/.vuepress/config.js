@@ -4,7 +4,7 @@ const introduction = [
 ]
 
 module.exports = {
-  base: '/loki-javascript-client/',
+  base: '/loki-javascript-client/docs_dist/',
   title: 'Loki JavaScript Client',
   description: 'Documentation for the Loki JavaScript Client library',
   dest: 'docs_dist',
