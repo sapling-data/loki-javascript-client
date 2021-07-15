@@ -9,13 +9,23 @@ module.exports = {
   description: 'Documentation for the Loki JavaScript Client library',
   dest: 'docs_dist',
   themeConfig: {
-    sidebar: {
-      '/': [
-        {
-          text: "Introduction",
-          children: introduction
-        },
-      ],
-    } 
+    // sidebar: {
+    //   '/': [
+    //     {
+    //       text: "Introduction",
+    //       children: introduction
+    //     },
+    //   ],
+    // } 
+    sidebar: [
+      {
+        title: 'Introduction',   // required
+        collapsable: false, // optional, defaults to true
+        children: [
+          '/introduction/what-is-loki-javascript-client',
+          '/introduction/get-started'
+        ]
+      },
+    ]
   }
 }
