@@ -5,9 +5,8 @@
   "scripts": {
     "rollup:dev": "rollup -c -w",
     "rollup:build": "rollup -c",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
@@ -28,9 +27,12 @@
     "eslint-plugin-import": "^2.22.1",
     "rollup": "^2.52.3",
     "rollup-plugin-terser": "^7.0.2",
-    "vitepress": "^0.15.6"
+    "vuepress": "^1.8.2"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "hash-sum": "^2.0.0",
+    "markdown-it-emoji": "^2.0.0",
+    "vue": "^2.6.14"
   }
 }
