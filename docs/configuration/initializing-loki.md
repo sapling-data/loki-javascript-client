@@ -15,7 +15,11 @@ const lokiConfig = {
   },
 
 const loki = new Loki(lokiConfig);
+// or window.loki in the browser
 ```
+::: tip TIP 
+If you are writing code for the browser, it is recommended that you assign your new Loki instance to `window.loki`. This allows you to declare `loki` as a global variable outside of the scope of, for example, your Vue instance. This keeps calls such as `loki.data.loadEntity()` consistent between your local dev environment and your deployed production code.
+:::
 It is **recommended** that you use your project's `package.json` file to store these options and then reference those variables rather than defining these options in your JavaScript itself, e.g.,
 ``` js
 import packageJson from '../package.json';
