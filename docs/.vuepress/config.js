@@ -1,5 +1,5 @@
 module.exports = {
-  // base: '/loki-javascript-client/wiki/',
+  base: '/loki-javascript-client/wiki/',
   title: 'Loki JavaScript Client',
   description: 'Documentation for the Loki JavaScript Client library',
   dest: 'wiki',
