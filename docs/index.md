@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: 'https://saplingdata.com/wp-content/uploads/2021/04/powered-sapling-image-2.png'
+heroImage: /loki-hero.png
 heroText: Loki JavaScript Client
 tagline: Client-side Loki in modern JavaScript
 actionText: Get Started →
