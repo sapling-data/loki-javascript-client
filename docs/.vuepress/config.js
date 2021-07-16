@@ -26,12 +26,14 @@ module.exports = {
         collapsable: false, // optional, defaults to true
         children: [
           '/configuration/initializing-loki',
+          '/configuration/package-json-template'
         ]
       },
       {
         title: 'APIs',
         collapsable: false, // optional, defaults to true
         children: [
+          '/apis/referencing-loki-apis',
           '/apis/data',
           '/apis/environ',
           '/apis/model',
