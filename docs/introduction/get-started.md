@@ -13,3 +13,6 @@ Run the `npm link` command in your terminal. This will make the production build
 ```
 ### Access the library in your project
 Now that you've built the library and made it accessible, you can start using `loki-javascript-client` to develop your project. **In your project**, run the command `npm link @sapling-data/loki-javascript-client`. This will connect the `/dist` folder in the cloned `loki-javascript-client` repository to the `node_modules` directory in your project. Now you will be able to use the library just like a normal NPM package. This is a test.
+## Available formats
+`loki-javascript-client` is currently available in UMD and ESM formats. We recommend using the UMD version for developing Node projects (including scripting, REST APIs with Express, or any code that is intended to be run on a server) and the ESM version for code that will run in a browser (Vue, React, or other client-side frameworks/apps).
+###
