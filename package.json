@@ -33,6 +33,7 @@
     "axios": "^0.21.1",
     "hash-sum": "^2.0.0",
     "markdown-it-emoji": "^2.0.0",
+    "strip-ansi": "^7.0.0",
     "vue": "^2.6.14"
   }
 }
