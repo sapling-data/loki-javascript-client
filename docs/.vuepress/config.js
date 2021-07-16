@@ -22,6 +22,13 @@ module.exports = {
         ]
       },
       {
+        title: 'Configuration',
+        collapsable: false, // optional, defaults to true
+        children: [
+          '/configuration/initializing-loki',
+        ]
+      },
+      {
         title: 'APIs',
         collapsable: false, // optional, defaults to true
         children: [
