@@ -14,7 +14,3 @@ features:
   details: Uses the same syntax as your existing client-side Loki calls so that your code words in your local dev environment and in the cloud.
 footer: MIT Licensed | Copyright © 2021 Sapling Data
 ---
-
-<!-- # Loki JavaScript Client
-### Client-side Loki? In modern JavaScript? With no jQuery?
-![Loki, from the Marvel Cinematic Universe, saying, "What could possibly go wrong?"](https://media0.giphy.com/media/iVNJ47qaeZnUq8TLBH/giphy.gif) -->
