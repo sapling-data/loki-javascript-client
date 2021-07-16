@@ -11,6 +11,6 @@ features:
 - title: Multi-format
   details: Built for Node and the browser so that you can easily use Loki wherever you need it.
 - title: Backwards-compatible
-  details: Uses the same syntax as your existing client-side Loki calls so that your code words in your local dev environment and in the cloud.
+  details: Uses the same syntax as your existing client-side Loki calls so that your code works in your local dev environment and in the cloud.
 footer: MIT Licensed | Copyright © 2021 Sapling Data
 ---
