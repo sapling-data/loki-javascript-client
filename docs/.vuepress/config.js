@@ -3,6 +3,14 @@ module.exports = {
   title: 'Loki JavaScript Client',
   description: 'Documentation for the Loki JavaScript Client library',
   dest: 'wiki',
+  plugins: [
+    [
+      'flexsearch',
+      {
+        maxSuggestions: 10
+      }
+    ],
+  ],
   themeConfig: {
     sidebar: [
       {

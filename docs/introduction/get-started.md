@@ -12,7 +12,17 @@ Run the `npm link` command in your terminal. This will make the production build
  -> /Users/<USER>/Documents/GitHub/loki-dev-client <USER>@<MACHINE_NAME> loki-dev-client
 ```
 ### Access the library in your project
-Now that you've built the library and made it accessible, you can start using `loki-javascript-client` to develop your project. **In your project**, run the command `npm link @sapling-data/loki-javascript-client`. This will connect the `/dist` folder in the cloned `loki-javascript-client` repository to the `node_modules` directory in your project. Now you will be able to use the library just like a normal NPM package. This is a test.
+Now that you've built the library and made it accessible, you can start using `loki-javascript-client` to develop your project. **In your project**, run the command `npm link @sapling-data/loki-javascript-client`. This will connect the `/dist` folder in the cloned `loki-javascript-client` repository to the `node_modules` directory in your project. Now you will be able to use the library just like a normal NPM package.
+
+Importing the library into your project using ES import syntax will look similar to the following:
+
+`import Loki from '../loki-javascript-client/dist/umd-bundle.js'`
+
+**or**
+
+`import Loki from '../node_modules/@sapling-data/loki-javascript-client/dist/es-bundle'`
+
 ## Available formats
-`loki-javascript-client` is currently available in UMD and ESM formats. We recommend using the UMD version for developing Node projects (including scripting, REST APIs with Express, or any code that is intended to be run on a server) and the ESM version for code that will run in a browser (Vue, React, or other client-side frameworks/apps).
-###
+`loki-javascript-client` is currently available in UMD and ESM formats. These are accessible at `/dist/umd-bundle.js` (UMD) and `/dist/es-bundle.js` (ESM).
+
+We recommend using the UMD version for developing Node projects (including scripting, REST APIs with Express, or any code that is intended to be run on a server) and the ESM version for code that will run in a browser (Vue, React, or other client-side frameworks/apps).
