@@ -73,12 +73,6 @@ export default class Urn {
     } else {
       index = index3;
     }
-    let lastSegment;
-    if (index < 0) {
-      lastSegment = urn;
-    } else {
-      lastSegment = urn.substring(index + 1);
-    }
-    return lastSegment;
+    return index < 0 ? urn : urn.substring(index + 1);
   }
 }
