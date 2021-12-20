@@ -62,7 +62,7 @@ export default class Urn {
     if (!urn) {
       return null;
     }
-    let index = -1;
+    let index;
     const index1 = urn.lastIndexOf(':');
     const index2 = urn.lastIndexOf('#');
     const index3 = urn.lastIndexOf('!');
