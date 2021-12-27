@@ -7,7 +7,16 @@ module.exports = {
     [
       'flexsearch',
       {
-        maxSuggestions: 10
+        maxSuggestions: 20,
+        search_options: {
+          encode: 'icase',
+          tokenize: 'forward',
+          resolution: 9,
+          doc: {
+            id: 'key',
+            field: ['title', 'content', 'headers'],
+          }
+        }
       }
     ],
   ],

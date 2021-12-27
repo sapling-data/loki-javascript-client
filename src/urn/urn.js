@@ -62,7 +62,7 @@ export default class Urn {
     if (!urn) {
       return null;
     }
-    let index = -1;
+    let index;
     const index1 = urn.lastIndexOf(':');
     const index2 = urn.lastIndexOf('#');
     const index3 = urn.lastIndexOf('!');
@@ -73,12 +73,6 @@ export default class Urn {
     } else {
       index = index3;
     }
-    let lastSegment;
-    if (index < 0) {
-      lastSegment = urn;
-    } else {
-      lastSegment = urn.substring(index + 1);
-    }
-    return lastSegment;
+    return index < 0 ? urn : urn.substring(index + 1);
   }
 }
