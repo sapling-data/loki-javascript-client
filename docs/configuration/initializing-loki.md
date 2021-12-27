@@ -12,7 +12,7 @@ Implementation may vary in other frameworks.
 ## Defining your config object
 Once you've imported `loki-javascript-client` into your project (typically as `Loki`), you will need to initialize an instance of the Loki client. This is done by defining a config object and passing that object to the Loki class constructor:
 ``` js
-import Loki from '../node_modules/@sapling-data/loki-javascript-client/dist/es-bundle';
+import Loki from '@sapling-data/loki-javascript-client/dist/es-bundle';
 
 const lokiConfig = {
   baseUrl,
