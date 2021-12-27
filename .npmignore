@@ -6,3 +6,4 @@ wiki/
 .eslintrc.js
 deploy.sh
 index.html
+rollup.config.js
