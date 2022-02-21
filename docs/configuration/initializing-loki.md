@@ -31,7 +31,7 @@ const loki = new Loki(lokiConfig);
 ::: tip TIP 
 If you are writing code for the browser, it is recommended that you assign your new Loki instance to `window.loki`. This allows you to declare `loki` as a global variable and eliminates the need for syntax such as `this.loki...` or similar. This keeps Loki calls consistent between your local dev environment and your deployed production code.
 :::
-It is **recommended** that you [use your project's `package.json` file](./package-json-template.md) to store these options and then reference those variables rather than defining these options in your JavaScript itself, e.g.,
+It is **recommended** that you [use a `loki.config.js` file](./loki-config-js-template.md) to store these options and then reference those variables rather than defining these options in your JavaScript itself, e.g.,
 ``` js
 import packageJson from '../package.json';
 ...
