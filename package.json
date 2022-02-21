@@ -25,16 +25,16 @@
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
+    "hash-sum": "^2.0.0",
     "markdown-it-emoji": "^2.0.0",
     "rollup": "^2.52.3",
     "rollup-plugin-terser": "^7.0.2",
+    "strip-ansi": "^7.0.0",
     "vue": "^2.6.14",
-    "vuepress": "^1.8.2",
+    "vuepress": "^1.9.2",
     "vuepress-plugin-flexsearch": "^0.2.0"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "hash-sum": "^2.0.0",
-    "strip-ansi": "^7.0.0"
+    "axios": "^0.21.1"
   }
 }
