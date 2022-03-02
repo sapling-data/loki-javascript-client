@@ -12,8 +12,6 @@ var bind$2 = function bind(fn, thisArg) {
 
 var bind$1 = bind$2;
 
-/*global toString:true*/
-
 // utils is a library of generic helper functions non-specific to axios
 
 var toString = Object.prototype.toString;
@@ -197,7 +195,7 @@ function isURLSearchParams(val) {
  * @returns {String} The String freed of excess whitespace
  */
 function trim(str) {
-  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+  return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
 }
 
 /**
@@ -443,10 +441,12 @@ function InterceptorManager$1() {
  *
  * @return {Number} An ID used to remove interceptor later
  */
-InterceptorManager$1.prototype.use = function use(fulfilled, rejected) {
+InterceptorManager$1.prototype.use = function use(fulfilled, rejected, options) {
   this.handlers.push({
     fulfilled: fulfilled,
-    rejected: rejected
+    rejected: rejected,
+    synchronous: options ? options.synchronous : false,
+    runWhen: options ? options.runWhen : null
   });
   return this.handlers.length - 1;
 };
@@ -482,31 +482,8 @@ var InterceptorManager_1 = InterceptorManager$1;
 
 var utils$a = utils$d;
 
-/**
- * Transform the data for a request or a response
- *
- * @param {Object|String} data The data to be transformed
- * @param {Array} headers The headers for the request or response
- * @param {Array|Function} fns A single function or Array of functions
- * @returns {*} The resulting transformed data
- */
-var transformData$1 = function transformData(data, headers, fns) {
-  /*eslint no-param-reassign:0*/
-  utils$a.forEach(fns, function transform(fn) {
-    data = fn(data, headers);
-  });
-
-  return data;
-};
-
-var isCancel$1 = function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-};
-
-var utils$9 = utils$d;
-
 var normalizeHeaderName$1 = function normalizeHeaderName(headers, normalizedName) {
-  utils$9.forEach(headers, function processHeader(value, name) {
+  utils$a.forEach(headers, function processHeader(value, name) {
     if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
       headers[normalizedName] = value;
       delete headers[name];
@@ -524,7 +501,7 @@ var normalizeHeaderName$1 = function normalizeHeaderName(headers, normalizedName
  * @param {Object} [response] The response.
  * @returns {Error} The error.
  */
-var enhanceError$1 = function enhanceError(error, config, code, request, response) {
+var enhanceError$2 = function enhanceError(error, config, code, request, response) {
   error.config = config;
   if (code) {
     error.code = code;
@@ -555,7 +532,7 @@ var enhanceError$1 = function enhanceError(error, config, code, request, respons
   return error;
 };
 
-var enhanceError = enhanceError$1;
+var enhanceError$1 = enhanceError$2;
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -569,7 +546,7 @@ var enhanceError = enhanceError$1;
  */
 var createError$2 = function createError(message, config, code, request, response) {
   var error = new Error(message);
-  return enhanceError(error, config, code, request, response);
+  return enhanceError$1(error, config, code, request, response);
 };
 
 var createError$1 = createError$2;
@@ -596,10 +573,10 @@ var settle$1 = function settle(resolve, reject, response) {
   }
 };
 
-var utils$8 = utils$d;
+var utils$9 = utils$d;
 
 var cookies$1 = (
-  utils$8.isStandardBrowserEnv() ?
+  utils$9.isStandardBrowserEnv() ?
 
   // Standard browser envs support document.cookie
     (function standardBrowserEnv() {
@@ -608,15 +585,15 @@ var cookies$1 = (
           var cookie = [];
           cookie.push(name + '=' + encodeURIComponent(value));
 
-          if (utils$8.isNumber(expires)) {
+          if (utils$9.isNumber(expires)) {
             cookie.push('expires=' + new Date(expires).toGMTString());
           }
 
-          if (utils$8.isString(path)) {
+          if (utils$9.isString(path)) {
             cookie.push('path=' + path);
           }
 
-          if (utils$8.isString(domain)) {
+          if (utils$9.isString(domain)) {
             cookie.push('domain=' + domain);
           }
 
@@ -693,7 +670,7 @@ var buildFullPath$1 = function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 };
 
-var utils$7 = utils$d;
+var utils$8 = utils$d;
 
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -725,10 +702,10 @@ var parseHeaders$1 = function parseHeaders(headers) {
 
   if (!headers) { return parsed; }
 
-  utils$7.forEach(headers.split('\n'), function parser(line) {
+  utils$8.forEach(headers.split('\n'), function parser(line) {
     i = line.indexOf(':');
-    key = utils$7.trim(line.substr(0, i)).toLowerCase();
-    val = utils$7.trim(line.substr(i + 1));
+    key = utils$8.trim(line.substr(0, i)).toLowerCase();
+    val = utils$8.trim(line.substr(i + 1));
 
     if (key) {
       if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
@@ -745,10 +722,10 @@ var parseHeaders$1 = function parseHeaders(headers) {
   return parsed;
 };
 
-var utils$6 = utils$d;
+var utils$7 = utils$d;
 
 var isURLSameOrigin$1 = (
-  utils$6.isStandardBrowserEnv() ?
+  utils$7.isStandardBrowserEnv() ?
 
   // Standard browser envs have full support of the APIs needed to test
   // whether the request URL is of the same origin as current location.
@@ -798,7 +775,7 @@ var isURLSameOrigin$1 = (
     * @returns {boolean} True if URL shares the same origin, otherwise false
     */
       return function isURLSameOrigin(requestURL) {
-        var parsed = (utils$6.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+        var parsed = (utils$7.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
         return (parsed.protocol === originURL.protocol &&
             parsed.host === originURL.host);
       };
@@ -812,7 +789,7 @@ var isURLSameOrigin$1 = (
     })()
 );
 
-var utils$5 = utils$d;
+var utils$6 = utils$d;
 var settle = settle$1;
 var cookies = cookies$1;
 var buildURL$1 = buildURL$2;
@@ -825,8 +802,9 @@ var xhr = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
     var requestHeaders = config.headers;
+    var responseType = config.responseType;
 
-    if (utils$5.isFormData(requestData)) {
+    if (utils$6.isFormData(requestData)) {
       delete requestHeaders['Content-Type']; // Let the browser set it
     }
 
@@ -845,23 +823,14 @@ var xhr = function xhrAdapter(config) {
     // Set the request timeout in MS
     request.timeout = config.timeout;
 
-    // Listen for ready state
-    request.onreadystatechange = function handleLoad() {
-      if (!request || request.readyState !== 4) {
+    function onloadend() {
+      if (!request) {
         return;
       }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
-        return;
-      }
-
       // Prepare the response
       var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var responseData = !responseType || responseType === 'text' ||  responseType === 'json' ?
+        request.responseText : request.response;
       var response = {
         data: responseData,
         status: request.status,
@@ -875,7 +844,30 @@ var xhr = function xhrAdapter(config) {
 
       // Clean up request
       request = null;
-    };
+    }
+
+    if ('onloadend' in request) {
+      // Use onloadend if available
+      request.onloadend = onloadend;
+    } else {
+      // Listen for ready state to emulate onloadend
+      request.onreadystatechange = function handleLoad() {
+        if (!request || request.readyState !== 4) {
+          return;
+        }
+
+        // The request errored out and we didn't get a response, this will be
+        // handled by onerror instead
+        // With one exception: request that using file: protocol, most browsers
+        // will return status as 0 even though it's a successful request
+        if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+          return;
+        }
+        // readystate handler is calling before onerror or ontimeout handlers,
+        // so we should call onloadend on the next 'tick'
+        setTimeout(onloadend);
+      };
+    }
 
     // Handle browser request cancellation (as opposed to a manual cancellation)
     request.onabort = function handleAbort() {
@@ -905,7 +897,10 @@ var xhr = function xhrAdapter(config) {
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
-      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
+      reject(createError(
+        timeoutErrorMessage,
+        config,
+        config.transitional && config.transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
         request));
 
       // Clean up request
@@ -915,7 +910,7 @@ var xhr = function xhrAdapter(config) {
     // Add xsrf header
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
-    if (utils$5.isStandardBrowserEnv()) {
+    if (utils$6.isStandardBrowserEnv()) {
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
         cookies.read(config.xsrfCookieName) :
@@ -928,7 +923,7 @@ var xhr = function xhrAdapter(config) {
 
     // Add headers to the request
     if ('setRequestHeader' in request) {
-      utils$5.forEach(requestHeaders, function setRequestHeader(val, key) {
+      utils$6.forEach(requestHeaders, function setRequestHeader(val, key) {
         if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
           // Remove Content-Type if data is undefined
           delete requestHeaders[key];
@@ -940,21 +935,13 @@ var xhr = function xhrAdapter(config) {
     }
 
     // Add withCredentials to request if needed
-    if (!utils$5.isUndefined(config.withCredentials)) {
+    if (!utils$6.isUndefined(config.withCredentials)) {
       request.withCredentials = !!config.withCredentials;
     }
 
     // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
-        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
-        if (config.responseType !== 'json') {
-          throw e;
-        }
-      }
+    if (responseType && responseType !== 'json') {
+      request.responseType = config.responseType;
     }
 
     // Handle progress if needed
@@ -990,15 +977,16 @@ var xhr = function xhrAdapter(config) {
   });
 };
 
-var utils$4 = utils$d;
+var utils$5 = utils$d;
 var normalizeHeaderName = normalizeHeaderName$1;
+var enhanceError = enhanceError$2;
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
 };
 
 function setContentTypeIfUnset(headers, value) {
-  if (!utils$4.isUndefined(headers) && utils$4.isUndefined(headers['Content-Type'])) {
+  if (!utils$5.isUndefined(headers) && utils$5.isUndefined(headers['Content-Type'])) {
     headers['Content-Type'] = value;
   }
 }
@@ -1015,42 +1003,77 @@ function getDefaultAdapter() {
   return adapter;
 }
 
-var defaults$2 = {
+function stringifySafely(rawValue, parser, encoder) {
+  if (utils$5.isString(rawValue)) {
+    try {
+      (parser || JSON.parse)(rawValue);
+      return utils$5.trim(rawValue);
+    } catch (e) {
+      if (e.name !== 'SyntaxError') {
+        throw e;
+      }
+    }
+  }
+
+  return (encoder || JSON.stringify)(rawValue);
+}
+
+var defaults$3 = {
+
+  transitional: {
+    silentJSONParsing: true,
+    forcedJSONParsing: true,
+    clarifyTimeoutError: false
+  },
+
   adapter: getDefaultAdapter(),
 
   transformRequest: [function transformRequest(data, headers) {
     normalizeHeaderName(headers, 'Accept');
     normalizeHeaderName(headers, 'Content-Type');
-    if (utils$4.isFormData(data) ||
-      utils$4.isArrayBuffer(data) ||
-      utils$4.isBuffer(data) ||
-      utils$4.isStream(data) ||
-      utils$4.isFile(data) ||
-      utils$4.isBlob(data)
+
+    if (utils$5.isFormData(data) ||
+      utils$5.isArrayBuffer(data) ||
+      utils$5.isBuffer(data) ||
+      utils$5.isStream(data) ||
+      utils$5.isFile(data) ||
+      utils$5.isBlob(data)
     ) {
       return data;
     }
-    if (utils$4.isArrayBufferView(data)) {
+    if (utils$5.isArrayBufferView(data)) {
       return data.buffer;
     }
-    if (utils$4.isURLSearchParams(data)) {
+    if (utils$5.isURLSearchParams(data)) {
       setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
       return data.toString();
     }
-    if (utils$4.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
+    if (utils$5.isObject(data) || (headers && headers['Content-Type'] === 'application/json')) {
+      setContentTypeIfUnset(headers, 'application/json');
+      return stringifySafely(data);
     }
     return data;
   }],
 
   transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
+    var transitional = this.transitional;
+    var silentJSONParsing = transitional && transitional.silentJSONParsing;
+    var forcedJSONParsing = transitional && transitional.forcedJSONParsing;
+    var strictJSONParsing = !silentJSONParsing && this.responseType === 'json';
+
+    if (strictJSONParsing || (forcedJSONParsing && utils$5.isString(data) && data.length)) {
       try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
+        return JSON.parse(data);
+      } catch (e) {
+        if (strictJSONParsing) {
+          if (e.name === 'SyntaxError') {
+            throw enhanceError(e, this, 'E_JSON_PARSE');
+          }
+          throw e;
+        }
+      }
     }
+
     return data;
   }],
 
@@ -1071,21 +1094,46 @@ var defaults$2 = {
   }
 };
 
-defaults$2.headers = {
+defaults$3.headers = {
   common: {
     'Accept': 'application/json, text/plain, */*'
   }
 };
 
-utils$4.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults$2.headers[method] = {};
+utils$5.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults$3.headers[method] = {};
 });
 
-utils$4.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults$2.headers[method] = utils$4.merge(DEFAULT_CONTENT_TYPE);
+utils$5.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults$3.headers[method] = utils$5.merge(DEFAULT_CONTENT_TYPE);
 });
 
-var defaults_1 = defaults$2;
+var defaults_1 = defaults$3;
+
+var utils$4 = utils$d;
+var defaults$2 = defaults_1;
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+var transformData$1 = function transformData(data, headers, fns) {
+  var context = this || defaults$2;
+  /*eslint no-param-reassign:0*/
+  utils$4.forEach(fns, function transform(fn) {
+    data = fn.call(context, data, headers);
+  });
+
+  return data;
+};
+
+var isCancel$1 = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
 
 var utils$3 = utils$d;
 var transformData = transformData$1;
@@ -1114,7 +1162,8 @@ var dispatchRequest$1 = function dispatchRequest(config) {
   config.headers = config.headers || {};
 
   // Transform request data
-  config.data = transformData(
+  config.data = transformData.call(
+    config,
     config.data,
     config.headers,
     config.transformRequest
@@ -1140,7 +1189,8 @@ var dispatchRequest$1 = function dispatchRequest(config) {
     throwIfCancellationRequested(config);
 
     // Transform response data
-    response.data = transformData(
+    response.data = transformData.call(
+      config,
       response.data,
       response.headers,
       config.transformResponse
@@ -1153,7 +1203,8 @@ var dispatchRequest$1 = function dispatchRequest(config) {
 
       // Transform response data
       if (reason && reason.response) {
-        reason.response.data = transformData(
+        reason.response.data = transformData.call(
+          config,
           reason.response.data,
           reason.response.headers,
           config.transformResponse
@@ -1251,12 +1302,221 @@ var mergeConfig$2 = function mergeConfig(config1, config2) {
   return config;
 };
 
+var name = "axios";
+var version = "0.21.4";
+var description = "Promise based HTTP client for the browser and node.js";
+var main = "index.js";
+var scripts = {
+	test: "grunt test",
+	start: "node ./sandbox/server.js",
+	build: "NODE_ENV=production grunt build",
+	preversion: "npm test",
+	version: "npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json",
+	postversion: "git push && git push --tags",
+	examples: "node ./examples/server.js",
+	coveralls: "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+	fix: "eslint --fix lib/**/*.js"
+};
+var repository = {
+	type: "git",
+	url: "https://github.com/axios/axios.git"
+};
+var keywords = [
+	"xhr",
+	"http",
+	"ajax",
+	"promise",
+	"node"
+];
+var author = "Matt Zabriskie";
+var license = "MIT";
+var bugs = {
+	url: "https://github.com/axios/axios/issues"
+};
+var homepage = "https://axios-http.com";
+var devDependencies = {
+	coveralls: "^3.0.0",
+	"es6-promise": "^4.2.4",
+	grunt: "^1.3.0",
+	"grunt-banner": "^0.6.0",
+	"grunt-cli": "^1.2.0",
+	"grunt-contrib-clean": "^1.1.0",
+	"grunt-contrib-watch": "^1.0.0",
+	"grunt-eslint": "^23.0.0",
+	"grunt-karma": "^4.0.0",
+	"grunt-mocha-test": "^0.13.3",
+	"grunt-ts": "^6.0.0-beta.19",
+	"grunt-webpack": "^4.0.2",
+	"istanbul-instrumenter-loader": "^1.0.0",
+	"jasmine-core": "^2.4.1",
+	karma: "^6.3.2",
+	"karma-chrome-launcher": "^3.1.0",
+	"karma-firefox-launcher": "^2.1.0",
+	"karma-jasmine": "^1.1.1",
+	"karma-jasmine-ajax": "^0.1.13",
+	"karma-safari-launcher": "^1.0.0",
+	"karma-sauce-launcher": "^4.3.6",
+	"karma-sinon": "^1.0.5",
+	"karma-sourcemap-loader": "^0.3.8",
+	"karma-webpack": "^4.0.2",
+	"load-grunt-tasks": "^3.5.2",
+	minimist: "^1.2.0",
+	mocha: "^8.2.1",
+	sinon: "^4.5.0",
+	"terser-webpack-plugin": "^4.2.3",
+	typescript: "^4.0.5",
+	"url-search-params": "^0.10.0",
+	webpack: "^4.44.2",
+	"webpack-dev-server": "^3.11.0"
+};
+var browser = {
+	"./lib/adapters/http.js": "./lib/adapters/xhr.js"
+};
+var jsdelivr = "dist/axios.min.js";
+var unpkg = "dist/axios.min.js";
+var typings = "./index.d.ts";
+var dependencies = {
+	"follow-redirects": "^1.14.0"
+};
+var bundlesize = [
+	{
+		path: "./dist/axios.min.js",
+		threshold: "5kB"
+	}
+];
+var require$$0 = {
+	name: name,
+	version: version,
+	description: description,
+	main: main,
+	scripts: scripts,
+	repository: repository,
+	keywords: keywords,
+	author: author,
+	license: license,
+	bugs: bugs,
+	homepage: homepage,
+	devDependencies: devDependencies,
+	browser: browser,
+	jsdelivr: jsdelivr,
+	unpkg: unpkg,
+	typings: typings,
+	dependencies: dependencies,
+	bundlesize: bundlesize
+};
+
+var pkg = require$$0;
+
+var validators$1 = {};
+
+// eslint-disable-next-line func-names
+['object', 'boolean', 'number', 'function', 'string', 'symbol'].forEach(function(type, i) {
+  validators$1[type] = function validator(thing) {
+    return typeof thing === type || 'a' + (i < 1 ? 'n ' : ' ') + type;
+  };
+});
+
+var deprecatedWarnings = {};
+var currentVerArr = pkg.version.split('.');
+
+/**
+ * Compare package versions
+ * @param {string} version
+ * @param {string?} thanVersion
+ * @returns {boolean}
+ */
+function isOlderVersion(version, thanVersion) {
+  var pkgVersionArr = thanVersion ? thanVersion.split('.') : currentVerArr;
+  var destVer = version.split('.');
+  for (var i = 0; i < 3; i++) {
+    if (pkgVersionArr[i] > destVer[i]) {
+      return true;
+    } else if (pkgVersionArr[i] < destVer[i]) {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * Transitional option validator
+ * @param {function|boolean?} validator
+ * @param {string?} version
+ * @param {string} message
+ * @returns {function}
+ */
+validators$1.transitional = function transitional(validator, version, message) {
+  var isDeprecated = version && isOlderVersion(version);
+
+  function formatMessage(opt, desc) {
+    return '[Axios v' + pkg.version + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
+  }
+
+  // eslint-disable-next-line func-names
+  return function(value, opt, opts) {
+    if (validator === false) {
+      throw new Error(formatMessage(opt, ' has been removed in ' + version));
+    }
+
+    if (isDeprecated && !deprecatedWarnings[opt]) {
+      deprecatedWarnings[opt] = true;
+      // eslint-disable-next-line no-console
+      console.warn(
+        formatMessage(
+          opt,
+          ' has been deprecated since v' + version + ' and will be removed in the near future'
+        )
+      );
+    }
+
+    return validator ? validator(value, opt, opts) : true;
+  };
+};
+
+/**
+ * Assert object's properties type
+ * @param {object} options
+ * @param {object} schema
+ * @param {boolean?} allowUnknown
+ */
+
+function assertOptions(options, schema, allowUnknown) {
+  if (typeof options !== 'object') {
+    throw new TypeError('options must be an object');
+  }
+  var keys = Object.keys(options);
+  var i = keys.length;
+  while (i-- > 0) {
+    var opt = keys[i];
+    var validator = schema[opt];
+    if (validator) {
+      var value = options[opt];
+      var result = value === undefined || validator(value, opt, options);
+      if (result !== true) {
+        throw new TypeError('option ' + opt + ' must be ' + result);
+      }
+      continue;
+    }
+    if (allowUnknown !== true) {
+      throw Error('Unknown option ' + opt);
+    }
+  }
+}
+
+var validator$1 = {
+  isOlderVersion: isOlderVersion,
+  assertOptions: assertOptions,
+  validators: validators$1
+};
+
 var utils$1 = utils$d;
 var buildURL = buildURL$2;
 var InterceptorManager = InterceptorManager_1;
 var dispatchRequest = dispatchRequest$1;
 var mergeConfig$1 = mergeConfig$2;
+var validator = validator$1;
 
+var validators = validator.validators;
 /**
  * Create a new instance of Axios
  *
@@ -1296,20 +1556,71 @@ Axios$1.prototype.request = function request(config) {
     config.method = 'get';
   }
 
-  // Hook up interceptors middleware
-  var chain = [dispatchRequest, undefined];
-  var promise = Promise.resolve(config);
+  var transitional = config.transitional;
 
+  if (transitional !== undefined) {
+    validator.assertOptions(transitional, {
+      silentJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      forcedJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      clarifyTimeoutError: validators.transitional(validators.boolean, '1.0.0')
+    }, false);
+  }
+
+  // filter out skipped interceptors
+  var requestInterceptorChain = [];
+  var synchronousRequestInterceptors = true;
   this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
-    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+    if (typeof interceptor.runWhen === 'function' && interceptor.runWhen(config) === false) {
+      return;
+    }
+
+    synchronousRequestInterceptors = synchronousRequestInterceptors && interceptor.synchronous;
+
+    requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
   });
 
+  var responseInterceptorChain = [];
   this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
-    chain.push(interceptor.fulfilled, interceptor.rejected);
+    responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
   });
 
-  while (chain.length) {
-    promise = promise.then(chain.shift(), chain.shift());
+  var promise;
+
+  if (!synchronousRequestInterceptors) {
+    var chain = [dispatchRequest, undefined];
+
+    Array.prototype.unshift.apply(chain, requestInterceptorChain);
+    chain = chain.concat(responseInterceptorChain);
+
+    promise = Promise.resolve(config);
+    while (chain.length) {
+      promise = promise.then(chain.shift(), chain.shift());
+    }
+
+    return promise;
+  }
+
+
+  var newConfig = config;
+  while (requestInterceptorChain.length) {
+    var onFulfilled = requestInterceptorChain.shift();
+    var onRejected = requestInterceptorChain.shift();
+    try {
+      newConfig = onFulfilled(newConfig);
+    } catch (error) {
+      onRejected(error);
+      break;
+    }
+  }
+
+  try {
+    promise = dispatchRequest(newConfig);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+
+  while (responseInterceptorChain.length) {
+    promise = promise.then(responseInterceptorChain.shift(), responseInterceptorChain.shift());
   }
 
   return promise;
@@ -2142,7 +2453,7 @@ class Urn {
     if (!urn) {
       return null;
     }
-    let index = -1;
+    let index;
     const index1 = urn.lastIndexOf(':');
     const index2 = urn.lastIndexOf('#');
     const index3 = urn.lastIndexOf('!');
@@ -2153,13 +2464,7 @@ class Urn {
     } else {
       index = index3;
     }
-    let lastSegment;
-    if (index < 0) {
-      lastSegment = urn;
-    } else {
-      lastSegment = urn.substring(index + 1);
-    }
-    return lastSegment;
+    return index < 0 ? urn : urn.substring(index + 1);
   }
 }
 
@@ -2433,7 +2738,7 @@ class Web {
   uploadUrl(destUrn) {
     const urnPath = this.urnToUrlPath(destUrn);
     const { apiPrefix } = this;
-    return `${apiPrefix}urn/com/loki/core/model/api/upload/v/${urnPath}`;
+    return `${apiPrefix}/urn/com/loki/core/model/api/upload/v/${urnPath}`;
   }
 
   /**
@@ -2639,5 +2944,5 @@ class Loki {
   }
 }
 
-export default Loki;
+export { Loki as default };
 //# sourceMappingURL=es-bundle.js.map
