@@ -270,7 +270,7 @@ export default class Web {
   uploadUrl(destUrn) {
     const urnPath = this.urnToUrlPath(destUrn);
     const { apiPrefix } = this;
-    return `${apiPrefix}urn/com/loki/core/model/api/upload/v/${urnPath}`;
+    return `${apiPrefix}/urn/com/loki/core/model/api/upload/v/${urnPath}`;
   }
 
   /**
