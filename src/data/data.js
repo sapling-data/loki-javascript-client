@@ -62,12 +62,12 @@ export default class Data {
     });
   }
 
-  saveEntity(entityUrn, viewUrn, entityData, options) {
+  async saveEntity(entityUrn, viewUrn, entityData, options) {
     options = options || {};
     options.queryParams = options.format ? `format=${options.format}` : 'format=json';
 
     const url = this.web.dataServiceUrl(entityUrn, viewUrn);
-    return axios({
+    const result = await axios({
       baseURL: this.baseUrl,
       method: 'POST',
       auth: this.auth || '',
@@ -77,6 +77,7 @@ export default class Data {
       },
       url,
     });
+    return result.data;
   }
 
   /** Delete the entity with the given urn
