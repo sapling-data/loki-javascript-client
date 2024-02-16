@@ -1,6 +1,6 @@
 {
   "name": "@sapling-data/loki-javascript-client",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "",
   "scripts": {
     "rollup:dev": "rollup -c -w",
