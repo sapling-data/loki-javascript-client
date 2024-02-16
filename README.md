@@ -1,7 +1,9 @@
 # loki-javascript-client
 Check out the docs here: https://sapling-data.github.io/loki-javascript-client/wiki/
 
-# Releasing
+# For Developers
+
+## Releasing
 
 When you create a release in github, an action will automatically publish that release to npmjs.
 
